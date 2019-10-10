@@ -29,11 +29,14 @@ public class ChuckNorrisServiceIntegrationTest {
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
   @ClassRule
-  public static WireMockRule wireMockRule = new WireMockRule(8089);
+  public static WireMockRule wireMockRule = new WireMockRule();
 
   @Autowired
   private ChuckNorrisService service;
 
+  /**
+   * The initializer makes it easier to refer to the dynamic WireMock port from @TestPropertySource.
+   */
   static class WireMockPortInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     @Override
