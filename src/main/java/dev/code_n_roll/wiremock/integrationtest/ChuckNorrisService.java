@@ -5,12 +5,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
 @Service
 public class ChuckNorrisService {
+
+  static final ChuckNorrisFact BACKUP_FACT = new ChuckNorrisFact(-1L, "&quot;It works on my machine&quot; always holds true for Chuck Norris.");
 
   private final RestTemplate restTemplate;
   private final String url;
@@ -24,9 +27,9 @@ public class ChuckNorrisService {
   public ChuckNorrisFact retrieveFact() {
     try {
       ResponseEntity<ChuckNorrisFactResponse> response = restTemplate.getForEntity(url, ChuckNorrisFactResponse.class);
-      return Optional.ofNullable(response.getBody()).map(ChuckNorrisFactResponse::getFact).orElse(null);
-    } catch (HttpStatusCodeException e){
-      return null;
+      return Optional.ofNullable(response.getBody()).map(ChuckNorrisFactResponse::getFact).orElse(BACKUP_FACT);
+    } catch (HttpStatusCodeException | ResourceAccessException e){
+      return BACKUP_FACT;
     }
   }
 

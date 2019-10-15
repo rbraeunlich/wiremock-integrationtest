@@ -33,7 +33,7 @@ public class ChuckNorrisServiceTest {
    * This test does not match the real world conditions. The RestTemplate would throw an exception.
    */
   @Test
-  public void shouldReturnNullInCaseOfError() {
+  public void shouldReturnBackupFactInCaseOfError() {
     String url = "http://localhost:8080";
     RestTemplate mockTemplate = mock(RestTemplate.class);
     ResponseEntity<ChuckNorrisFactResponse> responseEntity = new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
@@ -42,6 +42,6 @@ public class ChuckNorrisServiceTest {
 
     ChuckNorrisFact retrieved = service.retrieveFact();
 
-    assertThat(retrieved).isNull();
+    assertThat(retrieved).isEqualTo(ChuckNorrisService.BACKUP_FACT);
   }
 }
