@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class ChuckNorrisService {
     try {
       ResponseEntity<ChuckNorrisFactResponse> response = restTemplate.getForEntity(url, ChuckNorrisFactResponse.class);
       return Optional.ofNullable(response.getBody()).map(ChuckNorrisFactResponse::getFact).orElse(BACKUP_FACT);
-    } catch (HttpStatusCodeException | ResourceAccessException e){
+    } catch (RestClientException e){
       return BACKUP_FACT;
     }
   }
